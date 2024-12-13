@@ -9,6 +9,7 @@ RUN npm install -g npm@latest
 COPY src /app
 WORKDIR /app
 RUN npm ci --omit=dev &&\
+    npm cache clean --force &&\
     mv node_modules /node_modules
 
 # Copy build result to a new image.

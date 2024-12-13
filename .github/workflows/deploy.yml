@@ -15,8 +15,6 @@ jobs:
       contents: read
     steps:
     - uses: actions/checkout@v4
-      with:
-        ref: production
 
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v3

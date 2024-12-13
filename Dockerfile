@@ -13,8 +13,7 @@ RUN npm ci --omit=dev &&\
 
 # Copy build result to a new image.
 # This saves a lot of disk space.
-FROM docker.io/library/node:lts-alpine
-HEALTHCHECK CMD /usr/bin/timeout 5s /bin/sh -c "/usr/bin/wg show | /bin/grep -q interface || exit 1" --interval=1m --timeout=5s --retries=3
+FROM alpine:3.18
 COPY --from=build_node_modules /app /app
 
 # Move node_modules one directory up, so during development
@@ -32,18 +31,19 @@ RUN chmod +x /bin/wgpw
 
 # Install Linux packages
 RUN apk add --no-cache \
-    dpkg \
-    dumb-init \
+    nodejs \
+    # dpkg \
+    # dumb-init \
     iptables \
-    iptables-legacy \
+    # iptables-legacy \
     wireguard-tools
 
 # Use iptables-legacy
 # RUN update-alternatives --install /sbin/iptables iptables /sbin/iptables-legacy 10 --slave /sbin/iptables-restore iptables-restore /sbin/iptables-legacy-restore --slave /sbin/iptables-save iptables-save /sbin/iptables-legacy-save
 
 # Set Environment
-ENV DEBUG=Server,WireGuard
+# ENV DEBUG=Server,WireGuard
 
 # Run Web UI
 WORKDIR /app
-CMD ["/usr/bin/dumb-init", "node", "server.js"]
+CMD ["node", "server.js"]

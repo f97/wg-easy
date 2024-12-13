@@ -4,13 +4,12 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - production
+      - master
 
 jobs:
   deploy:
     name: Build & Deploy
     runs-on: ubuntu-latest
-    if: github.repository_owner == 'wg-easy'
     permissions:
       packages: write
       contents: read
@@ -39,5 +38,5 @@ jobs:
       uses: docker/build-push-action@v6
       with:
         push: true
-        platforms: linux/amd64,linux/arm/v6,linux/arm/v7,linux/arm64/v8
-        tags: ghcr.io/wg-easy/wg-easy:latest, ghcr.io/wg-easy/wg-easy:${{ env.RELEASE }}
+        platforms: linux/amd64
+        tags: ghcr.io/f97/wg-easy:latest, ghcr.io/f97/wg-easy:${{ env.RELEASE }}

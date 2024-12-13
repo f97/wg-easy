@@ -14,7 +14,7 @@ RUN npm ci --omit=dev &&\
 
 # Copy build result to a new image.
 # This saves a lot of disk space.
-FROM alpine:3.21
+FROM alpine:3.19
 COPY --from=build_node_modules /app /app
 
 # Move node_modules one directory up, so during development

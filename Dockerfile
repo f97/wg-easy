@@ -31,14 +31,17 @@ COPY --from=build /app/server/database/migrations /app/server/database/migration
 # Install Linux packages
 RUN apk add --no-cache \
     nodejs \
+    npm \
     # dpkg \
-    dumb-init \
+    # dumb-init \
     # iptables \
     # ip6tables \
     # kmod \
     # iptables-legacy \
     wireguard-tools
 
+RUN npm install --no-save libsql
+RUN apk del npm
 # Use iptables-legacy
 # RUN update-alternatives --install /usr/sbin/iptables iptables /usr/sbin/iptables-legacy 10 --slave /usr/sbin/iptables-restore iptables-restore /usr/sbin/iptables-legacy-restore --slave /usr/sbin/iptables-save iptables-save /usr/sbin/iptables-legacy-save
 # RUN update-alternatives --install /usr/sbin/ip6tables ip6tables /usr/sbin/ip6tables-legacy 10 --slave /usr/sbin/ip6tables-restore ip6tables-restore /usr/sbin/ip6tables-legacy-restore --slave /usr/sbin/ip6tables-save ip6tables-save /usr/sbin/ip6tables-legacy-save
@@ -53,4 +56,4 @@ ENV INIT_ENABLED=false
 LABEL org.opencontainers.image.source=https://github.com/f97/wg-easy
 
 # Run Web UI
-CMD ["/usr/bin/dumb-init", "node", "server/index.mjs"]
+CMD ["node", "server/index.mjs"]

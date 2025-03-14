@@ -26,7 +26,7 @@ COPY --from=build /app/.output /app
 # Copy migrations
 COPY --from=build /app/server/database/migrations /app/server/database/migrations
 # libsql
-RUN npm install --no-save libsql
+# RUN  apk add --no-cache libsql
 
 # Install Linux packages
 RUN apk add --no-cache \
@@ -53,4 +53,4 @@ ENV INIT_ENABLED=false
 LABEL org.opencontainers.image.source=https://github.com/f97/wg-easy
 
 # Run Web UI
-CMD ["/usr/bin/dumb-init", "node", "server/index.mjs"]
+CMD ["node", "server/index.mjs"]

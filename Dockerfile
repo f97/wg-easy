@@ -35,7 +35,7 @@ RUN apk add --no-cache \
     # dpkg \
     # dumb-init \
     # iptables \
-    # ip6tables \
+    ip6tables \
     # kmod \
     # iptables-legacy \
     wireguard-tools

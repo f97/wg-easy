@@ -26,13 +26,13 @@ COPY --from=build /app/.output /app
 # Copy migrations
 COPY --from=build /app/server/database/migrations /app/server/database/migrations
 # libsql
-RUN apk add --no-cache sqlite-libs
+# RUN apk add --no-cache sqlite-libs
 
 # Install Linux packages
 RUN apk add --no-cache \
     nodejs \
     # dpkg \
-    # dumb-init \
+    dumb-init \
     # iptables \
     # ip6tables \
     # kmod \
@@ -53,4 +53,4 @@ ENV INIT_ENABLED=false
 LABEL org.opencontainers.image.source=https://github.com/f97/wg-easy
 
 # Run Web UI
-CMD ["node", "server/index.mjs"]
+CMD ["/usr/bin/dumb-init", "node", "server/index.mjs"]

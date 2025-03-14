@@ -45,4 +45,4 @@ ENV INIT_ENABLED=false
 
 # Run Web UI
 WORKDIR /app
-CMD ["node", "server.js"]
+CMD ["/usr/bin/dumb-init", "node", "server/index.mjs"]

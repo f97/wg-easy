@@ -1,6 +1,10 @@
-# As a workaround we have to build on nodejs 18
-# nodejs 20 hangs on build with armv6/armv7
-FROM docker.io/library/node:18-alpine AS build_node_modules
+FROM docker.io/library/node:lts-alpine AS build
+WORKDIR /app
+
+# update corepack
+RUN npm install --global corepack@latest
+# Install pnpm
+RUN corepack enable pnpm
 
 # Copy Web UI
 COPY src /app
@@ -14,14 +18,7 @@ RUN npm ci --omit=dev &&\
 FROM alpine:3.18
 COPY --from=build_node_modules /app /app
 
-# Move node_modules one directory up, so during development
-# we don't have to mount it in a volume.
-# This results in much faster reloading!
-#
-# Also, some node_modules might be native, and
-# the architecture & OS of your development machine might differ
-# than what runs inside of docker.
-COPY --from=build_node_modules /node_modules /node_modules
+HEALTHCHECK --interval=1m --timeout=5s --retries=3 CMD /usr/bin/timeout 5s /bin/sh -c "/usr/bin/wg show | /bin/grep -q interface || exit 1"
 
 # Copy the needed wg-password scripts
 # COPY --from=build_node_modules /app/wgpw.sh /bin/wgpw
